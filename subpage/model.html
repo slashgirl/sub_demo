@@ -1,0 +1,391 @@
+﻿<html>
+<head>
+	<meta charset="utf-8" />
+    <style type="text/css">
+        #Checkbox1
+        {width: 22px; }
+    </style>
+</head>
+
+<body>
+	
+    <object id="RealBimOcx" classid="CLSID:2CD7E1BE-10B8-4A1C-B908-4FB7D4FD4ABD"  width="100%" height="95%" style="margin-bottom: 5px;">
+    </object>
+
+	<script type="text/javascript">
+		//      添加自定义锚点坐标位置
+		var ptArr = [
+			{ "x":"-88.95" , "y":"15.44" , "z":"141.96"},  //支撑轴力监测点
+			{ "x":"-83.71" , "y":"24.15" , "z":"155.85"},  //立柱监测点
+			{ "x":"15.70" , "y":"21.43" , "z":"165.31"},  //测斜点位01跳转对应图表
+			{ "x":"0.96" , "y":"21.43" , "z":"163.68"},  //测斜02
+			{ "x":"-177.88" , "y":"23.74" , "z":"163.82"},  //测斜03
+			{ "x":"-192.60" , "y":"23.78" , "z":"165.15"},  //测斜04
+			{ "x":"-190.47" , "y":"26.93" , "z":"124.71"},  //测斜05
+			{ "x":"-109.13" , "y":"25.38" , "z":"120.89"},  //测斜06
+			{ "x":"-104.72" , "y":"25.44" , "z":"141.75"},  //测斜07
+			{ "x":"-27.70" , "y":"21.43" , "z":"141.12"},  //测斜08
+			{ "x":"-26.26" , "y":"21.43" , "z":"120.40"},  //测斜09
+			{ "x":"17.69" , "y":"21.43" , "z":"119.64"},  //测斜10
+			{ "x":"13.30" , "y":"21.43" , "z":"178.22"},  //管线01
+			{ "x":"-17.82" , "y":"21.43" , "z":"178.22"},  //管线02
+			{ "x":"-47.06" , "y":"21.43" , "z":"178.22"},  //管线03
+			{ "x":"-77.06" , "y":"21.43" , "z":"178.22"},  //管线04
+			{ "x":"-107.06" , "y":"21.43" , "z":"178.22"},  //管线05
+			{ "x":"-192.95" , "y":"21.69" , "z":"106.14"},  //管线06
+			{ "x":"-162.95" , "y":"21.69" , "z":"106.14"},  //管线07
+			{ "x":"-132.95" , "y":"21.69" , "z":"106.14"},  //管线08
+			{ "x":"-102.95" , "y":"21.69" , "z":"106.14"},  //管线09
+			{ "x":"-72.95" , "y":"21.69" , "z":"106.14"},  //管线10
+			{ "x":"13.30" , "y":"21.43" , "z":"168.22"},  //水位01
+			{ "x":"-17.82" , "y":"21.43" , "z":"168.22"},  //水位02
+			{ "x":"-47.06" , "y":"21.43" , "z":"168.22"},  //水位03
+			{ "x":"-77.06" , "y":"21.43" , "z":"168.22"},  //水位04
+			{ "x":"-107.06" , "y":"21.43" , "z":"168.22"},  //水位05
+			{ "x":"-192.95" , "y":"21.69" , "z":"116.14"},  //水位06
+			{ "x":"-162.95" , "y":"21.69" , "z":"116.14"},  //水位07
+			{ "x":"-132.95" , "y":"21.69" , "z":"116.14"},  //水位08
+			{ "x":"-102.95" , "y":"21.69" , "z":"116.14"},  //水位09
+			{ "x":"-72.95" , "y":"21.69" , "z":"116.14"},  //水位10
+			{ "x":"13.30" , "y":"21.43" , "z":"173.22"},  //沉降01
+			{ "x":"-17.82" , "y":"21.43" , "z":"173.22"},  //沉降02
+			{ "x":"-47.06" , "y":"21.43" , "z":"173.22"},  //沉降03
+			{ "x":"-77.06" , "y":"21.43" , "z":"173.22"},  //沉降04
+			{ "x":"-107.06" , "y":"21.43" , "z":"173.22"},  //沉降05
+			{ "x":"-192.95" , "y":"21.69" , "z":"111.14"},  //沉降06
+			{ "x":"-162.95" , "y":"21.69" , "z":"111.14"},  //沉降07
+			{ "x":"-132.95" , "y":"21.69" , "z":"111.14"},  //沉降08
+			{ "x":"-102.95" , "y":"21.69" , "z":"111.14"},  //沉降09
+			{ "x":"-72.95" , "y":"21.69" , "z":"111.14"},  //沉降10
+		];
+		var strPos = [];
+		var _l = ptArr.length;
+		
+		for (var i = 0; i < _l ; i ++){
+			var selPtX = ptArr[i].x;
+			var selPtY = ptArr[i].y;
+			var selPtZ = ptArr[i].z;
+			
+			var strPosele = selPtX.toString()+" "+selPtY.toString()+" "+selPtZ.toString();
+			strPos.push(strPosele);
+		}
+		
+		var strPos1 = strPos[0];
+		var strPos2 = strPos[1];
+		var strPos3 = strPos[2];
+		var strPos4 = strPos[3];
+		var strPos5 = strPos[4];
+		var strPos6 = strPos[5];
+		var strPos7 = strPos[6];
+		var strPos8 = strPos[7];
+		var strPos9 = strPos[8];
+		var strPos10 = strPos[9];
+		var strPos11 = strPos[10];
+		var strPos12 = strPos[11];
+		var strPos13 = strPos[12];
+		var strPos14 = strPos[13];
+		var strPos15 = strPos[14];
+		var strPos16 = strPos[15];
+		var strPos17 = strPos[16];
+		var strPos18 = strPos[17];
+		var strPos19 = strPos[18];
+		var strPos20 = strPos[19];
+		var strPos21 = strPos[20];
+		var strPos22 = strPos[21];
+		var strPos23 = strPos[22];
+		var strPos24 = strPos[23];
+		var strPos25 = strPos[24];
+		var strPos26 = strPos[25];
+		var strPos27 = strPos[26];
+		var strPos28 = strPos[27];
+		var strPos29 = strPos[28];
+		var strPos30 = strPos[29];
+		var strPos31 = strPos[30];
+		var strPos32 = strPos[31];
+		var strPos33 = strPos[32];
+		var strPos34 = strPos[33];
+		var strPos35 = strPos[34];
+		var strPos36 = strPos[35];
+		var strPos37 = strPos[36];
+		var strPos38 = strPos[37];
+		var strPos39 = strPos[38];
+		var strPos40 = strPos[39];
+		var strPos41 = strPos[40];
+		var strPos42 = strPos[41];
+		
+		//		添加普通锚点
+		function allanchor() {
+            RealBimOcx.AddAnchorBegin(0);
+				RealBimOcx.AddAnchorFlexible("1","!(RealBIMAppFileCache)\\Picture\\anc01.png",strPos1,"0 20 20 0",0xffffffff,"CustomFont01","支撑轴力Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("2","!(RealBIMAppFileCache)\\Picture\\anc02.png",strPos2,"0 20 20 0",0xffffffff,"CustomFont01","立柱Nc5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("3","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos3,"0 20 20 0",0xffffffff,"CustomFont01","测斜CX1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("4","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos4,"0 20 20 0",0xffffffff,"CustomFont01","CX2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("5","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos5,"0 20 20 0",0xffffffff,"CustomFont01","CX3","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("6","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos6,"0 20 20 0",0xffffffff,"CustomFont01","CX4","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("7","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos7,"0 20 20 0",0xffffffff,"CustomFont01","CX5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("8","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos8,"0 20 20 0",0xffffffff,"CustomFont01","CX6","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("9","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos9,"0 20 20 0",0xffffffff,"CustomFont01","CX7","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("10","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos10,"0 20 20 0",0xffffffff,"CustomFont01","CX8","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("11","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos11,"0 20 20 0",0xffffffff,"CustomFont01","CX9","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("12","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos12,"0 20 20 0",0xffffffff,"CustomFont01","CX10","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("13","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos13,"0 20 20 0",0xffffffff,"CustomFont01","管线Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("14","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos14,"0 20 20 0",0xffffffff,"CustomFont01","Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("15","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos15,"0 20 20 0",0xffffffff,"CustomFont01","Dlc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("16","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos16,"0 20 20 0",0xffffffff,"CustomFont01","Dxc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("17","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos17,"0 20 20 0",0xffffffff,"CustomFont01","Gc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("18","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos18,"0 20 20 0",0xffffffff,"CustomFont01","Gc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("19","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos19,"0 20 20 0",0xffffffff,"CustomFont01","Wc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("20","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos20,"0 20 20 0",0xffffffff,"CustomFont01","Mc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("21","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos21,"0 20 20 0",0xffffffff,"CustomFont01","Wc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("22","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos22,"0 20 20 0",0xffffffff,"CustomFont01","Mc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("23","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos23,"0 20 20 0",0xffffffff,"CustomFont01","水位SW0","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("24","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos24,"0 20 20 0",0xffffffff,"CustomFont01","SW1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("25","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos25,"0 20 20 0",0xffffffff,"CustomFont01","SW2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("26","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos26,"0 20 20 0",0xffffffff,"CustomFont01","SW3","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("27","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos27,"0 20 20 0",0xffffffff,"CustomFont01","SW4","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("28","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos28,"0 20 20 0",0xffffffff,"CustomFont01","SW5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("29","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos29,"0 20 20 0",0xffffffff,"CustomFont01","SW6","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("30","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos30,"0 20 20 0",0xffffffff,"CustomFont01","SW7","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("31","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos31,"0 20 20 0",0xffffffff,"CustomFont01","SW8","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("32","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos32,"0 20 20 0",0xffffffff,"CustomFont01","SW9","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("33","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos33,"0 20 20 0",0xffffffff,"CustomFont01","沉降D5-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("34","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos34,"0 20 20 0",0xffffffff,"CustomFont01","D6-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("35","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos35,"0 20 20 0",0xffffffff,"CustomFont01","D5-2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("36","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos36,"0 20 20 0",0xffffffff,"CustomFont01","D61","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("37","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos37,"0 20 20 0",0xffffffff,"CustomFont01","D71","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("38","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos38,"0 20 20 0",0xffffffff,"CustomFont01","D81","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("39","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos39,"0 20 20 0",0xffffffff,"CustomFont01","D91","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("40","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos40,"0 20 20 0",0xffffffff,"CustomFont01","D92","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("41","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos41,"0 20 20 0",0xffffffff,"CustomFont01","D82","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("42","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos42,"0 20 20 0",0xffffffff,"CustomFont01","D72","20 50 70 0",0xffffffff,0,0xff00ffff);
+            RealBimOcx.AddAnchorEnd();
+        };
+
+        function firstbtn() {
+			RealBimOcx.DelAllAnchors();
+			RealBimOcx.AddAnchorBegin(0);
+				RealBimOcx.AddAnchorFlexible("13","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos13,"0 20 20 0",0xffffffff,"CustomFont01","管线Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("14","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos14,"0 20 20 0",0xffffffff,"CustomFont01","Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("15","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos15,"0 20 20 0",0xffffffff,"CustomFont01","Dlc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("16","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos16,"0 20 20 0",0xffffffff,"CustomFont01","Dxc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("17","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos17,"0 20 20 0",0xffffffff,"CustomFont01","Gc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("18","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos18,"0 20 20 0",0xffffffff,"CustomFont01","Gc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("19","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos19,"0 20 20 0",0xffffffff,"CustomFont01","Wc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("20","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos20,"0 20 20 0",0xffffffff,"CustomFont01","Mc1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("21","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos21,"0 20 20 0",0xffffffff,"CustomFont01","Wc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("22","!(RealBIMAppFileCache)\\Picture\\anc04.png",strPos22,"0 20 20 0",0xffffffff,"CustomFont01","Mc2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("33","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos33,"0 20 20 0",0xffffffff,"CustomFont01","沉降D5-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("34","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos34,"0 20 20 0",0xffffffff,"CustomFont01","D5-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("35","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos35,"0 20 20 0",0xffffffff,"CustomFont01","D5-2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("36","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos36,"0 20 20 0",0xffffffff,"CustomFont01","D61","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("37","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos37,"0 20 20 0",0xffffffff,"CustomFont01","D71","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("38","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos38,"0 20 20 0",0xffffffff,"CustomFont01","D81","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("39","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos39,"0 20 20 0",0xffffffff,"CustomFont01","D91","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("40","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos40,"0 20 20 0",0xffffffff,"CustomFont01","D92","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("41","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos41,"0 20 20 0",0xffffffff,"CustomFont01","D82","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("42","!(RealBIMAppFileCache)\\Picture\\anc06.png",strPos42,"0 20 20 0",0xffffffff,"CustomFont01","D72","20 50 70 0",0xffffffff,0,0xff00ffff);
+            RealBimOcx.AddAnchorEnd();
+        };
+        
+        function secondbtn() {
+			RealBimOcx.DelAllAnchors();
+			RealBimOcx.AddAnchorBegin(0);
+				RealBimOcx.AddAnchorFlexible("1","!(RealBIMAppFileCache)\\Picture\\anc01.png",strPos1,"0 20 20 0",0xffffffff,"CustomFont01","支撑轴力Jc2-1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("2","!(RealBIMAppFileCache)\\Picture\\anc02.png",strPos2,"0 20 20 0",0xffffffff,"CustomFont01","立柱Nc5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("23","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos23,"0 20 20 0",0xffffffff,"CustomFont01","水位SW0","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("24","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos24,"0 20 20 0",0xffffffff,"CustomFont01","SW1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("25","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos25,"0 20 20 0",0xffffffff,"CustomFont01","SW2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("26","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos26,"0 20 20 0",0xffffffff,"CustomFont01","SW3","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("27","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos27,"0 20 20 0",0xffffffff,"CustomFont01","SW4","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("28","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos28,"0 20 20 0",0xffffffff,"CustomFont01","SW5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("29","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos29,"0 20 20 0",0xffffffff,"CustomFont01","SW6","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("30","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos30,"0 20 20 0",0xffffffff,"CustomFont01","SW7","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("31","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos31,"0 20 20 0",0xffffffff,"CustomFont01","SW8","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("32","!(RealBIMAppFileCache)\\Picture\\anc05.png",strPos32,"0 20 20 0",0xffffffff,"CustomFont01","SW9","20 50 70 0",0xffffffff,0,0xff00ffff);
+            RealBimOcx.AddAnchorEnd();
+        };
+        
+        function thirdbtn() {
+			RealBimOcx.DelAllAnchors();
+			RealBimOcx.AddAnchorBegin(0);
+				RealBimOcx.AddAnchorFlexible("3","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos3,"0 20 20 0",0xffffffff,"CustomFont01","测斜CX1","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("4","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos4,"0 20 20 0",0xffffffff,"CustomFont01","CX2","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("5","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos5,"0 20 20 0",0xffffffff,"CustomFont01","CX3","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("6","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos6,"0 20 20 0",0xffffffff,"CustomFont01","CX4","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("7","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos7,"0 20 20 0",0xffffffff,"CustomFont01","CX5","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("8","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos8,"0 20 20 0",0xffffffff,"CustomFont01","CX6","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("9","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos9,"0 20 20 0",0xffffffff,"CustomFont01","CX7","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("10","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos10,"0 20 20 0",0xffffffff,"CustomFont01","CX8","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("11","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos11,"0 20 20 0",0xffffffff,"CustomFont01","CX9","20 50 70 0",0xffffffff,0,0xff00ffff);
+				RealBimOcx.AddAnchorFlexible("12","!(RealBIMAppFileCache)\\Picture\\anc03.png",strPos12,"0 20 20 0",0xffffffff,"CustomFont01","CX10","20 50 70 0",0xffffffff,0,0xff00ffff);
+            RealBimOcx.AddAnchorEnd();
+        };
+ 
+	</script>
+	
+    <script type="text/javascript">
+
+
+    	var g_CurState = "Idle" ;
+
+        function Checkbox1_onclick() {
+            var ctrl = document.getElementById("Checkbox1");
+            if (ctrl.checked == true) {
+                RealBimOcx.SetSysUIRgnVisible("lt", true);
+            } else {
+                RealBimOcx.SetSysUIRgnVisible("lt", false);
+            }
+        }
+
+        function Checkbox2_onclick() {
+            var ctrl = document.getElementById("Checkbox2");
+            if (ctrl.checked == true) {
+                RealBimOcx.SetSysUIRgnVisible("rt", true);
+            } else {
+                RealBimOcx.SetSysUIRgnVisible("rt", false);
+            }
+        }
+
+        function CreateCustomUI_onclick() {
+            RealBimOcx.CreateAExtButtonBegin(2);
+
+            RealBimOcx.AddAExtButtonMode(0,"normal","正常！",  0x8fff0000, 0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,1023,1023, 0x8f00ff00, "!(RealBIMAppFileCache)\\Picture\\button01.dds");
+            RealBimOcx.AddAExtButtonMode(0,"hover","悬浮！",0x8f00ff00,0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,255,255, 0x8f0000ff, "!(RealBIMAppFileCache)\\skybox\\Picture\\oasisday_back.jpg.dds");
+            RealBimOcx.AddAExtButtonMode(0,"press","按下！", 0x8f0000ff,0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,255,255, 0x8fff0000, "!(RealBIMAppFileCache)\\skybox\\Picture\\oasisday_top.jpg.dds");
+            
+            RealBimOcx.AddAExtButtonMode(1,"normal","(2)正常！",0x8fff0000, 0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,1023,1023, 0x8f00ff00, "!(RealBIMAppFileCache)\\Picture\\button01.dds");
+            RealBimOcx.AddAExtButtonMode(1,"hover","(2)悬浮！",0x8f00ff00,0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,255,255, 0x8f0000ff, "!(RealBIMAppFileCache)\\skybox\\Picture\\oasisday_back.jpg.dds");
+            RealBimOcx.AddAExtButtonMode(1,"press","(2)按下！", 0x8f0000ff,0x8f000000, -1,1,1,-1,  82, -64,64,64,-64,  0,0,255,255, 0x8fff0000, "!(RealBIMAppFileCache)\\skybox\\Picture\\oasisday_top.jpg.dds");
+               
+            RealBimOcx.CreateAExtButtonEnd("RealBIM::ExtBtn::Test1", "微软雅黑", true, 16, -1*64);
+
+            RealBimOcx.SetExtButtonPos("RealBIM::ExtBtn::Test1", 500, 500);
+        }
+
+        function OnExtBtnClick(BtnName,CurBtnMode,BtnModeNum){
+            if(BtnName == "RealBIM::ExtBtn::Test1"){
+            var BtnMode = (CurBtnMode+1)%BtnModeNum;
+                RealBimOcx.SetExtButtonMode(BtnName,BtnMode);
+            }
+        }
+
+        function SetObjAttrUIState(CenterPosX, CenterPosY, CenterPosZ, AttrText){
+            RealBimOcx.SetObjAttrUIState(CenterPosX, CenterPosY, CenterPosZ, AttrText);
+        }
+
+        function DeleteAnchor_onclick() {
+           var ctrl =  document.getElementById("DeleteAnchor");
+            if(ctrl.value =="进入锚点删除状态"){
+                g_CurState = "DelAnchor";
+                ctrl.value ="退出锚点删除状态";
+            }
+            
+        }
+
+        function ClipView_onclick() {
+            var ctrl =  document.getElementById("ClipView");
+            if(ctrl.value == "剖切显示"){
+                    RealBimOcx.SetSimpleClipPlaneBegin();
+                    RealBimOcx.SetSimpleClipPlaneInfo(0,-1,0,30);
+                    RealBimOcx.SetSimpleClipPlaneEnd();
+                    ctrl.value = "关闭剖切"
+            }else{
+                    RealBimOcx.SetSimpleClipPlaneBegin();
+                    RealBimOcx.SetSimpleClipPlaneEnd();
+                    ctrl.value = "剖切显示"
+            }
+        }
+
+    </script>
+
+    <script language="javascript"  for="RealBimOcx" EVENT="OnCurSelModelChanged(strObjName, uObjSubID, fObjPosX, fObjPosY, fObjPosZ)" type="text/javascript">
+
+//      alert(fObjPosX);
+//		alert(fObjPosY);
+//		alert(fObjPosZ);
+        
+    </script>
+
+    <script language="javascript" for="RealBimOcx" EVENT="OnAnchorSelected(SelAnchorName)" type="text/javascript">
+        if(g_CurState == "DelAnchor"){
+            RealBimOcx.DelAnchorBegin();
+            RealBimOcx.DeleteAnchor(SelAnchorName);
+            RealBimOcx.DelAnchorEnd();
+            g_CurState = "Idle";
+
+            var ctrl =  document.getElementById("DeleteAnchor");
+            if(ctrl.value =="退出锚点删除状态"){
+               ctrl.value ="进入锚点删除状态";           
+            }
+        }
+    </script>
+
+    <script language="javascript"   for="RealBimOcx" EVENT="OnRealBimOcxInited()" type="text/javascript">
+//			RealBimOcx.SwitchBIMSceneSimple("http://160h92q194.imwork.net:8008/default.aspx?dir=url_res02&path=","res_tunneltest01");
+		RealBimOcx.SwitchBIMSceneSimple("D:\\AppTest\\URL_res\\","res_tunneltest01");
+        RealBimOcx.SetSceVersionInfo(100, -1);
+        
+//      RealBimOcx.CreateAGolFont("CustomFont01","微软雅黑",true,true,14,14,32,1.0,0*64,"");
+//      RealBimOcx.CreateAGolFont("CustomFont02","微软雅黑",true,true,12,12,8,1.0,0*64,"");
+        
+        RealBimOcx.CreateAGolFont("CustomFont01","黑体",true,true,14,14,32,1.0,0*64,"");
+        RealBimOcx.CreateAGolFont("CustomFont02","黑体",true,true,12,12,0,1.0,0*64,"");
+    </script>
+    
+    <script language="javascript"   for="RealBimOcx" EVENT="WorkCompleteNotification(CompleteEvent,retError)" type="text/javascript">
+		if(CompleteEvent == "LoadMainScene" && retError==0 ){
+                RealBimOcx.SetSceHugeObjVisible(true);
+
+        }
+    </script>
+    
+    <script language="javascript"   for="RealBimOcx" EVENT="UIClicked(BtnType,BtnMode)" type="text/javascript">
+        if(BtnType == "ADD_ANCHOR"){
+            g_CurState = "AddAnchor";
+        }
+    </script>
+    
+    <script for="RealBimOcx" event="OnAnchorSelected(SelAnchorName)" language='javascript'>
+		console.log(SelAnchorName);
+            if (parseInt(SelAnchorName) == 1){
+	        	window.open("dataview7.html")
+	        };
+	        if (parseInt(SelAnchorName) == 2){
+	        	window.open("dataview8.html")
+	        };
+	        if (parseInt(SelAnchorName) == 3){
+	        	window.open("dataview11.html")
+	        };
+	        if (parseInt(SelAnchorName) == 13){
+	        	window.open("dataview2.html")
+	        };
+	        if (parseInt(SelAnchorName) == 23){
+	        	window.open("dataview6.html")
+	        };
+	        if (parseInt(SelAnchorName) == 33){
+	        	window.open("dataview10.html")
+	        };
+    </script>
+    
+    <script language="javascript"   for="RealBimOcx" EVENT="WorkCompleteNotification(CompleteEvent,retError)" type="text/javascript">
+		if(CompleteEvent == "LoadMainScene" && retError==0 ){
+				RealBimOcx.SetSceTerrainAlpha(0.3);
+	            RealBimOcx.SetAllHugeObjSubValidState(1);
+	            RealBimOcx.SetSceHugeObjVisible(true);			
+	    }
+    </script>
+
+    <script language="javascript"   for="RealBimOcx" EVENT="ExtBtnClick(BtnName,CurBtnMode,BtnModeNum)" type="text/javascript">
+		OnExtBtnClick(BtnName,CurBtnMode,BtnModeNum);
+    </script>
+
+
+    <!--<input id="Checkbox1" type="checkbox" checked="checked"  onclick="return Checkbox1_onclick()" />显示左上角UI
+    <input id="Checkbox2" type="checkbox" onclick="return Checkbox2_onclick()" />显示右上角UI&nbsp;&nbsp;-->
+    <input id="allanc" type="button" value="监测点总体布置" onclick="allanchor()" />
+    <input id="firstbtn" type="button" value="地表、周边建筑物、管线沉降点" onclick="firstbtn()" />
+    <input id="secondbtn" type="button" value="水位、支撑轴力、立柱隆沉" onclick="secondbtn()" />
+    <input id="thirdbtn" type="button" value="坑内墙体测斜" onclick="thirdbtn()" />
+   
+</body>
+</html>

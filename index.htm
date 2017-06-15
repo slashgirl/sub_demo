@@ -1,0 +1,341 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>GALAXY 地铁数据监测平台</title>
+    <link href="lib/ligerUI/skins/Aqua/css/ligerui-all.css" rel="stylesheet" type="text/css" />  
+    <link rel="stylesheet" type="text/css" id="mylink"/>   
+    <script src="lib/jquery/jquery-1.9.0.min.js" type="text/javascript"></script>    
+    <script src="lib/ligerUI/js/ligerui.all.js" type="text/javascript"></script>  
+    <script src="lib/jquery.cookie.js"></script>
+    <script src="lib/json2.js"></script>
+    <script src="js/indexdata.js" type="text/javascript"></script>
+        <script type="text/javascript">
+ 
+            var tab = null;
+            var accordion = null;
+            var tree = null;
+            var tabItems = [];
+            $(function ()
+            {
+
+                //布局
+                $("#layout1").ligerLayout({
+                    leftWidth: 190,
+                    height: '100%',
+                    heightDiff: -34,
+                    space: 4,
+                    onHeightChanged: f_heightChanged,
+                    onLeftToggle: function ()
+                    {
+                        tab && tab.trigger('sysWidthChange');
+                    },
+                    onRightToggle: function ()
+                    {
+                        tab && tab.trigger('sysWidthChange');
+                    }
+                });
+
+                var height = $(".l-layout-center").height();
+
+                //Tab
+                tab = $("#framecenter").ligerTab({
+                    height: height,
+                    showSwitchInTab : true,
+                    showSwitch: true,
+                    onAfterAddTabItem: function (tabdata)
+                    {
+                        tabItems.push(tabdata);
+                        saveTabStatus();
+                    },
+                    onAfterRemoveTabItem: function (tabid)
+                    { 
+                        for (var i = 0; i < tabItems.length; i++)
+                        {
+                            var o = tabItems[i];
+                            if (o.tabid == tabid)
+                            {
+                                tabItems.splice(i, 1);
+                                saveTabStatus();
+                                break;
+                            }
+                        }
+                    },
+                    onReload: function (tabdata)
+                    {
+                        var tabid = tabdata.tabid;
+                        addFrameSkinLink(tabid);
+                    }
+                });
+
+                //面板
+                $("#accordion1").ligerAccordion({
+                    height: height - 24, speed: null
+                });
+
+                $(".l-link").hover(function ()
+                {
+                    $(this).addClass("l-link-over");
+                }, function ()
+                {
+                    $(this).removeClass("l-link-over");
+                });
+                //树
+                $("#tree1").ligerTree({
+                    data : indexdata,
+                    checkbox: false,
+                    slide: false,
+                    nodeWidth: 120,
+                    attribute: ['nodename', 'url'],
+                    render : function(a){
+                        if (!a.isnew) return a.text;
+                        return '<a href="' + a.url + '" target="_blank">' + a.text + '</a>';
+                    },
+                    onSelect: function (node)
+                    {
+                        if (!node.data.url) return;
+                        if (node.data.isnew)
+                        { 
+                            return;
+                        }
+                        var tabid = $(node.target).attr("tabid");
+                        if (!tabid)
+                        {
+                            tabid = new Date().getTime();
+                            $(node.target).attr("tabid", tabid)
+                        } 
+                        f_addTab(tabid, node.data.text, node.data.url);
+                    }
+                });
+
+                function openNew(url)
+                { 
+                    var jform = $('#opennew_form');
+                    if (jform.length == 0)
+                    {
+                        jform = $('<form method="post" />').attr('id', 'opennew_form').hide().appendTo('body');
+                    } else
+                    {
+                        jform.empty();
+                    } 
+                    jform.attr('action', url);
+                    jform.attr('target', '_blank'); 
+                    jform.trigger('submit');
+                };
+
+
+                tab = liger.get("framecenter");
+                accordion = liger.get("accordion1");
+                tree = liger.get("tree1");
+                $("#pageloading").hide();
+
+                css_init();
+                pages_init();
+            });
+            function f_heightChanged(options)
+            {  
+                if (tab)
+                    tab.addHeight(options.diff);
+                if (accordion && options.middleHeight - 24 > 0)
+                    accordion.setHeight(options.middleHeight - 24);
+            }
+            function f_addTab(tabid, text, url)
+            {
+                tab.addTabItem({
+                    tabid: tabid,
+                    text: text,
+                    url: url,
+                    callback: function ()
+                    {
+                        addShowCodeBtn(tabid); 
+                        addFrameSkinLink(tabid); 
+                    }
+                });
+            }
+            function addShowCodeBtn(tabid)
+            {
+
+                var jiframe = $("#" + tabid);
+                viewSourceBtn.insertBefore(jiframe);
+                viewSourceBtn.click(function ()
+                {
+                    showCodeView(jiframe.attr("src"));
+                }).hover(function ()
+                {
+                    viewSourceBtn.addClass("viewsourcelink-over");
+                }, function ()
+                {
+                    viewSourceBtn.removeClass("viewsourcelink-over");
+                });
+            }
+
+            function pages_init()
+            {
+                var tabJson = $.cookie('liger-home-tab'); 
+                if (tabJson)
+                { 
+                    var tabitems = JSON2.parse(tabJson);
+                    for (var i = 0; tabitems && tabitems[i];i++)
+                    { 
+                        f_addTab(tabitems[i].tabid, tabitems[i].text, tabitems[i].url);
+                    } 
+                }
+            }
+            function saveTabStatus()
+            { 
+                $.cookie('liger-home-tab', JSON2.stringify(tabItems));
+            }
+
+            function getQueryString(name)
+            {
+                var now_url = document.location.search.slice(1), q_array = now_url.split('&');
+                for (var i = 0; i < q_array.length; i++)
+                {
+                    var v_array = q_array[i].split('=');
+                    if (v_array[0] == name)
+                    {
+                        return v_array[1];
+                    }
+                }
+                return false;
+            }
+            function attachLinkToFrame(iframeId, filename)
+            { 
+                if(!window.frames[iframeId]) return;
+                var head = window.frames[iframeId].document.getElementsByTagName('head').item(0);
+                var fileref = window.frames[iframeId].document.createElement("link");
+                if (!fileref) return;
+                fileref.setAttribute("rel", "stylesheet");
+                fileref.setAttribute("type", "text/css");
+                fileref.setAttribute("href", filename);
+                head.appendChild(fileref);
+            }
+            function getLinkPrevHref(iframeId)
+            {
+                if (!window.frames[iframeId]) return;
+                var head = window.frames[iframeId].document.getElementsByTagName('head').item(0);
+                var links = $("link:first", head);
+                for (var i = 0; links[i]; i++)
+                {
+                    var href = $(links[i]).attr("href");
+                    if (href && href.toLowerCase().indexOf("ligerui") > 0)
+                    {
+                        return href.substring(0, href.toLowerCase().indexOf("lib") );
+                    }
+                }
+            }
+     </script> 
+<style type="text/css"> 
+    body,html{height:100%;}
+    body{ padding:0px; margin:0;   overflow:hidden;}  
+    .l-link{ display:block; height:26px; line-height:26px; padding-left:10px; text-decoration:underline; color:#333;}
+
+    .l-layout-top{background:#102A49; color:White;}
+    .l-layout-bottom{ background:#E5EDEF; text-align:center;}
+    #pageloading{position:absolute; left:0px; top:0px; background:white url('loading.gif') no-repeat center; width:100%; height:100%;z-index:99999;}
+    .l-link{ display:block; line-height:22px; height:22px; padding-left:16px;border:1px solid white; margin:4px;}
+    .l-link-over{ background:#FFEEAC; border:1px solid #DB9F00;} 
+    .l-winbar{ background:#2B5A76; height:30px; position:absolute; left:0px; bottom:0px; width:100%; z-index:99999;}
+    .space{ color:#E7E7E7;}
+    /* 顶部 */ 
+    .l-topmenu{ margin:0; padding:0; height:50px; line-height:50px; background-color: #1F3E7E;  position:relative; border-top:1px solid #1D438B;  }
+    .l-topmenu-logo{ color:#E7E7E7; padding-left:40px; line-height:50px;background:url('lib/images/logo.png') no-repeat 10px 15px;font-size: 20px;}
+    .l-topmenu-welcome{  position:absolute; height:24px; line-height:24px;  right:30px; top:2px;color:#070A0C;}
+    .l-topmenu-welcome a{ color:#E7E7E7; text-decoration:underline} 
+     .body-gray2014 #framecenter{
+        margin-top:3px;
+    }
+      .viewsourcelink {
+         background:#B3D9F7;  display:block; position:absolute; right:10px; top:3px; padding:6px 4px; color:#333; text-decoration:underline;
+    }
+    .viewsourcelink-over {
+        background:#81C0F2;
+    }
+    .l-topmenu-welcome label {color:white;
+    }
+
+ </style>
+</head>
+<body style="padding:0px;background:#EAEEF5;">  
+<div id="pageloading"></div>  
+<div id="topmenu" class="l-topmenu">
+    <div class="l-topmenu-logo">GALAXY 地铁数据监测平台</div>
+</div>
+  <div id="layout1" style="width:99.2%; margin:0 auto; margin-top:4px; "> 
+        <div position="left"  title="主菜单" id="accordion1"> 
+    
+                    <div title="工程信息">
+                    	<div style=" height:7px;"></div>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','工程信息','demos/form/formNew.htm')">工程信息</a> 
+                    </div>
+                    <div title="数据查询">
+                    	<div style=" height:7px;"></div>
+                        <a class="l-link" href="javascript:f_addTab('listpage','地表沉降','demos/case/listpage1.htm')">地表沉降</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','地下管线垂直位移','demos/case/listpage2.htm')">地下管线垂直位移</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','围护墙顶垂直位移','demos/case/listpage3.htm')">围护墙顶垂直位移</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','围护墙顶水平位移','demos/case/listpage4.htm')">围护墙顶水平位移</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','建筑物倾斜','demos/case/listpage5.htm')">建筑物倾斜</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','坑外水位','demos/case/listpage6.htm')">坑外水位</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','支撑轴力','demos/case/listpage7.htm')">支撑轴力</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','立柱隆沉','demos/case/listpage8.htm')">立柱隆沉</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','坑外土体测斜','demos/case/listpage9.htm')">坑外土体测斜</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','建筑物沉降','demos/case/listpage10.htm')">建筑物沉降</a>
+                        <a class="l-link" href="javascript:f_addTab('listpage','围护墙体侧向位移(测斜)','demos/case/listpage11.htm')">围护墙体侧向位移(测斜)</a>
+                    </div> 
+                    
+                    <div title="图形报表">
+                    	<div style=" height:7px;"></div>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','地表沉降','subpage/dataview01.html')">地表沉降</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','地下管线沉降','subpage/dataview2.html')">地下管线沉降</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','围护墙顶沉降','subpage/dataview3.html')">围护墙顶沉降</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','围护墙顶位移','subpage/dataview4.html')">围护墙顶位移</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','建筑物倾斜','subpage/dataview5.html')">建筑物倾斜</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','坑外水位','subpage/dataview6.html')">坑外水位</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','支撑轴力','subpage/dataview7.html')">支撑轴力</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','立柱隆沉','subpage/dataview8.html')">立柱隆沉</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','坑外土体测斜','subpage/dataview9.html')">坑外土体测斜</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','建筑物沉降','subpage/dataview10.html')">建筑物沉降</a>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','围护墙体侧向位移(测斜)','subpage/dataview11.html')">围护墙体侧向位移(测斜)</a>
+                    </div> 
+                    
+                    <div title="报表导入">
+                    	<div style=" height:7px;"></div>
+                    	<a class="l-link" href="javascript:f_addTab('listpage','报表导入','subpage/formin.html')">报表导入</a> 
+                    </div>
+                    
+                    <div title="材料管理">
+                         <!--<ul id="tree1" style="margin-top:3px;">-->
+                        <a class="l-link" href="#">材料计划</a>
+                        <a class="l-link" href="#">材料采购单</a> 
+                    </div>
+                    
+                    <div title="进度管理">
+                        <a class="l-link" href="#">计划展示</a>
+                        <a class="l-link" href="#">计划查询</a> 
+                    </div>
+                    
+                    <div title="质量管理">
+                        <a class="l-link" href="#">质量检查</a>
+                        <a class="l-link" href="#">质量整改</a> 
+                    </div>
+                    
+                    <div title="安全管理">
+                        <a class="l-link" href="#">安全日志</a>  
+                        <a class="l-link" href="#">安全整改</a> 
+                    </div>
+        </div>
+        <div position="center" id="framecenter"> 
+            <div tabid="home" title="3D模型" style="height:300px" >
+                <!--<iframe frameborder="0" name="home" id="home" src="http://114.55.0.46:8888/dmo/monitordata/monitordatalist.htm"></iframe>-->
+                <iframe frameborder="0" name="home" id="home" src="subpage/model.html"></iframe>
+               
+            </div> 
+        </div> 
+        
+    </div>
+    <div  style="height:32px; line-height:32px; text-align:center;">
+            Copyright © 上海隧道院 by Daisy
+    </div>
+    <div style="display:none"></div>
+</body>
+</html>

@@ -1,0 +1,354 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>D5-02曲线图</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="shortcut icon" type="image/x-icon" href="" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/public_hj.css"
+	rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/index_hj.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="http://114.55.0.46:8888/dmo/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet" />
+<link href="http://114.55.0.46:8888/dmo/resources/css/user.css" type="text/css"
+	rel="stylesheet" />
+
+<script type="text/javascript"
+	src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://114.55.0.46:8888/dmo/resources/js/public_hj.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.6.2.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery.shop.common.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/highstock.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/exporting.js"></script>
+<script>
+Highcharts.setOptions({ global: { useUTC: false } });
+jQuery(document).ready(function(){
+  jQuery("#sensorTypeName").change(function(){
+      //var level=jQuery(this).attr("level");
+      var sensorTypeName=jQuery(this).val();
+      // alert("sensorTypeName:" + sensorTypeName);
+      if(sensorTypeName!=""){
+          jQuery.post("http://114.55.0.46:8888/dmo/load_monitorline.htm",{"sensorTypeName":sensorTypeName},function(data){
+              jQuery("#monitorlineid").empty();
+              jQuery("#monitorlineid").append("<option value=''>请选择</option>");
+              jQuery.each(data, function(index,item){
+                  jQuery("#monitorlineid").append("<option value='"+item.id+"'>"+item.monitorLineName+"</option>");
+                  //jQuery("#sensor").show();
+              });
+              jQuery("#sensorid").empty();
+              jQuery("#sensorid").append("<option value=''>请选择</option>");
+          },"json");
+      }else{
+          jQuery("#monitorlineid").empty();
+          jQuery("#monitorlineid").append("<option value=''>请选择</option>");
+      }
+  });
+  jQuery("#monitorlineid").change(function(){
+      //var level=jQuery(this).attr("level");
+      var id=jQuery(this).val();
+      if(id!=""){
+          jQuery.post("http://114.55.0.46:8888/dmo/load_sensor_without_basepoint.htm",{"pid":id},function(data){
+              jQuery("#sensorid").empty();
+              jQuery("#sensorid").append("<option value=''>请选择</option>");
+              jQuery.each(data, function(index,item){
+                  jQuery("#sensorid").append("<option value='"+item.id+"'>"+item.sensorName+"</option>");
+                  //jQuery("#sensor").show();
+              });
+          }, "json");
+      } else {
+          jQuery("#sensorid").empty();
+          jQuery("#sensorid").append("<option value=''>请选择</option>");
+      }
+  });
+});
+
+function dateFormat(timeMs, format){
+    var t = new Date(timeMs);
+    var tf = function(i){return (i < 10 ? '0' : '') + i};
+    return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
+        switch(a){
+            case 'yyyy':
+                return tf(t.getFullYear());
+                break;
+            case 'MM':
+                return tf(t.getMonth() + 1);
+                break;
+            case 'mm':
+                return tf(t.getMinutes());
+                break;
+            case 'dd':
+                return tf(t.getDate());
+                break;
+            case 'HH':
+                return tf(t.getHours());
+                break;
+            case 'ss':
+                return tf(t.getSeconds());
+                break;
+        }
+    })
+}
+
+			$(function(){
+			var x_Axis = [[0.0],[-0.374],[-0.501],[-0.631],[-0.962],[-1.255]];
+			if( x_Axis.length <= 20){
+				x_Axis = x_Axis.length-1;
+			}else{
+				x_Axis = 19;
+			}
+			
+			var cellTime = ['2017-05-03 16:26:00','2017-05-03 16:26:00','2017-05-03 16:26:00','2017-05-03 16:26:00','2017-05-03 16:26:00','2017-05-03 16:26:00'];
+			var monitorname;
+			var obj = document.getElementById("monitorlineid");
+			monitorname = obj.options[obj.selectedIndex].text;
+			var chart = new Highcharts.Chart({
+	            chart: {
+	                renderTo: 'container',
+	                defaultSeriesType: 'line', //图表类别，可取值有：line、spline、area、areaspline、bar、column等
+	                marginRight: 130,
+	                marginBottom: 40
+	            },
+	            title: {
+	                text: monitorname + '沉降曲线图', //设置一级标题
+	                x: -40, //center
+	                y: 20
+	            },
+	            subtitle: {
+	                text:'时间：' + cellTime[0], //设置二级标题
+	                x: -40,
+	                y: 40
+	            },
+	            scrollbar: {
+	                enabled: true
+	            },
+	            xAxis: {
+	            	 categories: ['01','02','03','04','05','06'],//设置x轴的标题
+                     minTickInterval: 100,
+                     minorTickInterval: 100,
+                     minorTickPosition: 2500,
+                     tickInterval: 1,
+                     max: x_Axis
+
+	            },
+	            yAxis: {
+	                title: {
+	                    text: '形变值 ' //设置y轴的标题
+	                },
+	                plotLines: [{
+	                    value: 0,
+	                    width: 1,
+	                    color: '#808080'
+	                }]
+	            },
+	            lang:{
+		            months:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+		            shortMonths:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+		            weekdays:['星期天','星期一','星期二','星期三','星期四','星期五','星期六'],
+		            exportButtonTitle:'导出PDF',
+		            printButtonTitle:'打印图片'
+		        },
+	            legend: {
+	                layout: 'vertical',
+	                align: 'right', //设置说明文字的文字 left/right/top/
+	                verticalAlign: 'top',
+	                x: -10,
+	                y: 100,
+	                borderWidth: 0
+	            },
+	            plotOptions: {
+	                line: {
+	                    dataLabels: {
+	                        enabled: true //显示每条曲线每个节点的数据项的值
+	                    },
+	                    enableMouseTracking: false
+	                }
+	            },
+	            series: [{
+	                name: '本次沉降值', //每条线的名称
+	                data: [[0.0],[-0.374],[-0.501],[-0.631],[-0.962],[-1.255]]//每条线的数据
+	            },{
+	            	name: '累计沉降值', //每条线的名称
+               		data: [[0.0],[-0.356],[-1.239],[-1.502],[-0.922],[-2.136]]//每条线的数据
+         		},{
+	            	name: '初始值', //每条线的名称
+               		data: [[0.0],[0.0],[0.0],[0.0],[0.0],[0.0]]//每条线的数据
+         		}/* ,{
+                    name: 'Tokyo',
+                    data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 25.2]
+                }  */
+         		]
+	        });
+		});
+	
+var txt;
+
+function generateSinkingDataLine(){
+	var sensorTypeName = document.getElementById("sensorTypeName").value;
+	if(sensorTypeName == ""){
+		alert("请选择传感器类型和监测线!");
+		return;
+	}
+	var monitorlineid = document.getElementById("monitorlineid").value;
+	if(monitorlineid == ""){
+		alert("请选择监测线!");
+		return;
+	}
+	
+	document.ListForm.submit();
+}
+	
+</script>
+
+</head>
+<body class="info">
+	<script type="text/javascript" language="javascript">
+$(document).ready(function () {  
+    setInterval("getCountData()", 10000);  
+});  
+function getCountData() {
+    jQuery.post("http://114.55.0.46:8888/dmo/common/getsensorcount.htm", function(data){
+        //$("#sensorCount").text("共有 " + data.sensorCount + " 个探测器 | ");
+        $("#sensorCountL1Alarm").text(" " + data.sensorCountL1Alarm + " ");
+        $("#sensorCountL2Alarm").text(" " + data.sensorCountL2Alarm + " ");
+        $("#sensorCountL3Alarm").text(" " + data.sensorCountL3Alarm + " ");
+    }, "json");
+}
+</script>
+<style>
+</style>
+
+	<div class="main_bj"></div>
+	<div class="main">
+		
+
+
+		<table width="100%" border="0" cellspacing="0" cellpadding="0"
+			class="user_table">
+
+			<tr>
+				<script>
+jQuery(document).ready(function(){
+	//
+	jQuery(".sellul>li>a").click(function(){
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menucontract.jpg");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menuspread.jpg");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	//
+	jQuery(".sellul>ul>li").removeClass("this");
+	jQuery("li[op=monitordataline]").addClass("this");
+
+	
+});
+
+function logout(){
+	var url = "http://114.55.0.46:8888/dmo/logout.htm";
+	var checkResult = confirm("确定退出登录？");
+    if (checkResult)
+    {
+    	window.location.href=url;
+    }
+}
+</script>
+
+<td width="1" id="userbg" valign="top">
+
+</td>
+
+				<td id="centerbg" valign="top">
+					<div class="productmain">
+						<div class="ordercon">
+							<form method="post" name="ListForm" id="ListForm">
+								<div class="ordersear">
+									<span class="px10">&nbsp;&nbsp;&nbsp;时间段:</span> 
+                  					<span class="ordersel">
+                  						<input name="beginTime" type="text" id="beginTime" value="2017-05-01" readonly="readonly" style="width:80px;"/>
+                  					</span>
+                  					<span>-</span>
+				                  	<span class="ordersel">
+				                  		<input name="endTime" type="text" id="endTime" value="2017-05-06" readonly="readonly" style="width:80px;"/>
+				                  	</span>
+									<span>&nbsp;&nbsp;&nbsp;仪器名称:</span> <span class="ordersel"> 
+										<select name="sensorTypeName" id="sensorTypeName">
+												<option value="" selected="selected">请选择</option>
+													<option value="P-levelingTransducer" selected="selected">苏一光DSZ2+FS1</option> 							
+										</select>
+									</span>
+									<span>&nbsp;&nbsp;&nbsp;仪器编号:</span> <span class="ordersel"> 
+										<select name="sensorTypeName" id="sensorTypeName">
+												<option value="" selected="selected">请选择</option>
+													<option value="P-levelingTransducer" selected="selected">213119</option> 							
+										</select>
+									</span>
+								    <span>&nbsp;&nbsp;&nbsp;监测线:</span> <span class="ordersel">
+										<select name="monitorlineid" id="monitorlineid">
+											<option value="" selected="selected">请选择</option>
+											<option value="1">D5-1</option> 											
+											<option value="2" selected="selected">D5-02</option> 											
+											<option value="3">D5-3</option>
+											<option value="4">D5-4</option>
+											<option value="5">D5-5</option>
+											<option value="6">D6-1</option>
+											<option value="7">D6-2</option>
+											<option value="8">D6-3</option>
+											<option value="9">D6-4</option>
+											<option value="10">D6-5</option>
+											<option value="11">D7-1</option>
+											<option value="12">D7-2</option>
+											<option value="13">D7-3</option>
+											<option value="14">D7-4</option>
+											<option value="15">D7-5</option>
+											<option value="16">D8-1</option>
+											<option value="17">D8-2</option>
+											<option value="18">D8-3</option>
+											<option value="19">D8-4</option>
+											<option value="20">D8-5</option>
+											<option value="21">D9-1</option>
+											<option value="22">D9-2</option>
+									</span>
+								    <span class="orderbtn"> <input name="" type="button"
+										value="生成曲线" style="cursor: pointer;"
+										onclick="generateSinkingDataLine()" />
+									</span>
+								</div>
+							</form>
+						</div>
+
+						<div class="operation">
+							<table width="1039" border="0" cellspacing="0" cellpadding="0"
+								id="opertable">
+								<tr id="opertitle">
+									<td></td>
+								</tr>
+							</table>
+							<div id="container" style="height: 550px;"></div>
+						</div>
+					</div>
+			
+				</td>
+			</tr>
+		</table>
+
+		
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+    jQuery(".notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",delayTime:0 });
+</script>
+</body>
+</html>

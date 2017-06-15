@@ -1,0 +1,25 @@
+﻿var CustomersData = 
+{Rows:
+	[{"SenserID":"D5-1","NowCh":"-0.89","AllCh":"-19.02","Action":""},
+	 {"SenserID":"D5-2","NowCh":"-0.54","AllCh":"-7.39","Action":""},
+	 {"SenserID":"D5-3","NowCh":"-0.54","AllCh":"-28.63","Action":""},
+	 {"SenserID":"D5-4","NowCh":"-0.27","AllCh":"-18.63","Action":""},
+	 {"SenserID":"D5-5","NowCh":"-0.21","AllCh":"-13.75","Action":""},
+	 {"SenserID":"D6-1","NowCh":"-0.67","AllCh":"-6.87","Action":""},
+	 {"SenserID":"D6-2","NowCh":"-0.33","AllCh":"-12.79","Action":""},
+	 {"SenserID":"D6-3","NowCh":"-0.63","AllCh":"-13.25","Action":""},
+	 {"SenserID":"D6-4","NowCh":"-0.96","AllCh":"-10.81","Action":""},
+	 {"SenserID":"D6-5","NowCh":"-0.66","AllCh":"-16.76","Action":""},
+	 {"SenserID":"D7-1","NowCh":"-0.29","AllCh":"-17.61","Action":""},
+	 {"SenserID":"D7-2","NowCh":"-0.11","AllCh":"-23.54","Action":""},
+	 {"SenserID":"D7-3","NowCh":"-0.67","AllCh":"-21.32","Action":""},
+	 {"SenserID":"D7-4","NowCh":"-0.26","AllCh":"-19.11","Action":""},
+	 {"SenserID":"D7-5","NowCh":"-0.16","AllCh":"-16.39","Action":""},
+	 {"SenserID":"D8-1","NowCh":"-0.35","AllCh":"-21.35","Action":""},
+	 {"SenserID":"D8-2","NowCh":"-0.52","AllCh":"-13.60","Action":""},
+	 {"SenserID":"D8-3","NowCh":"-0.35","AllCh":"-17.66","Action":""},
+	 {"SenserID":"D8-4","NowCh":"-0.52","AllCh":"-18.52","Action":""},
+	 {"SenserID":"D8-5","NowCh":"-0.67","AllCh":"-13.60","Action":""},
+	 {"SenserID":"D9-1","NowCh":"-0.83","AllCh":"-15.77","Action":""},
+	 {"SenserID":"D9-2","NowCh":"-0.81","AllCh":"-17.66","Action":""}
+	 ],Total:91};

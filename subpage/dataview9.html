@@ -1,0 +1,401 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!-- 
+需求改动：
+20161015：
+	（1）显示即时形变
+	（3）对于静力水准仪，不显示基准点的曲线
+	（2）显示除倾角和测斜仪之外其他曲线
+ -->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>CX5即时形变图</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="shortcut icon" type="image/x-icon" href="" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/public_hj.css" rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/index_hj.css" rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/jquery-ui-1.8.22.custom.css" type="text/css" rel="stylesheet" />
+<link href="http://114.55.0.46:8888/dmo/resources/css/user.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript" src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://114.55.0.46:8888/dmo/resources/js/public_hj.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.6.2.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery.shop.common.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/highstock.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/exporting.js"></script>
+<script>
+Highcharts.setOptions({ global: { useUTC: false } });
+jQuery(document).ready(function(){
+  jQuery('#beginTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  monthNamesShort: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+      dayNamesMin: ['日','一','二','三','四','五','六']
+  });
+  jQuery('#endTime').datepicker({
+	  dateFormat:"yy-mm-dd",
+	  changeMonth: true,
+	  changeYear: true,
+	  monthNamesShort: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+      dayNamesMin: ['日','一','二','三','四','五','六']
+  });
+  jQuery("#sensorTypeName").change(function(){
+      //var level=jQuery(this).attr("level");
+      var sensorTypeName=jQuery(this).val();
+      // alert("sensorTypeName:" + sensorTypeName);
+      if(sensorTypeName!=""){
+          jQuery.post("http://114.55.0.46:8888/dmo/load_monitorline.htm",{"sensorTypeName":sensorTypeName},function(data){
+              jQuery("#monitorlineid").empty();
+              jQuery("#monitorlineid").append("<option value=''>请选择</option>");
+              jQuery.each(data, function(index,item){
+                  jQuery("#monitorlineid").append("<option value='"+item.id+"'>"+item.monitorLineName+"</option>");
+                  //jQuery("#sensor").show();
+              });
+              jQuery("#sensorid").empty();
+              jQuery("#sensorid").append("<option value=''>请选择</option>");
+          },"json");
+      }else{
+          jQuery("#monitorlineid").empty();
+          jQuery("#monitorlineid").append("<option value=''>请选择</option>");
+      }
+  });
+  jQuery("#monitorlineid").change(function(){
+      //var level=jQuery(this).attr("level");
+      var id=jQuery(this).val();
+      if(id!=""){
+          jQuery.post("http://114.55.0.46:8888/dmo/load_sensor_without_basepoint.htm",{"pid":id},function(data){
+              jQuery("#sensorid").empty();
+              jQuery("#sensorid").append("<option value=''>请选择</option>");
+              jQuery.each(data, function(index,item){
+                  jQuery("#sensorid").append("<option value='"+item.id+"'>"+item.sensorName+"</option>");
+                  //jQuery("#sensor").show();
+              });
+          }, "json");
+      } else {
+          jQuery("#sensorid").empty();
+          jQuery("#sensorid").append("<option value=''>请选择</option>");
+      }
+  });
+  document.getElementById("currentMaxValue").value = getCookie("currMax"); 
+  document.getElementById("currentMinValue").value = getCookie("currMin");  
+});
+
+var maxChange,minChange;
+function changeData(){
+    generateSinkingDataLine();
+}
+
+//alert("111111111111111111111");
+			$(function(){
+			var maxValue,minValue;
+			if(getCookie("currMax") == ""){
+                maxValue = null;
+			}else{
+				maxValue = getCookie("currMax") ;
+			}
+			
+			if(getCookie("currMin") == ""){
+				minValue = null;
+            }else{
+            	minValue = getCookie("currMin") ;
+            }
+			
+			//alert([[1493568104000,-0.117],[1493575305000,-0.025],[1493582506000,-0.078],[1493589707000,0.002],[1493596908000,0.028],[1493604109000,0.031],[1493611310000,0.057],[1493618511000,0.035],[1493625712000,0.007],[1493632913000,-0.005],[1493640114000,-0.035],[1493647315000,-0.028],[1493654516000,-0.114],[1493661717000,-0.049],[1493668918000,-0.079],[1493676119000,-0.01],[1493683320000,0.023],[1493690521000,0.038],[1493697722000,0.033],[1493704923000,0.039],[1493712124000,0.045],[1493719325000,-0.009],[1493726526000,-0.012],[1493733727000,-0.027],[1493740928000,-0.024],[1493748129000,-0.022],[1493755330000,-0.031],[1493762531000,-0.021],[1493769732000,0.024],[1493776933000,0.027],[1493784134000,0.039],[1493791335000,0.05],[1493798536000,0.062]]);
+		    var chart1=new Highcharts.StockChart({
+		        chart:{
+		            renderTo:'container',
+		            hight:550
+		        },
+		        credits:{
+		            enabled:false,
+		            href:"http://www.mymonitorsys.com",
+		            test:''
+		        },
+		        lang:{
+		            months:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+		            shortMonths:['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+		            weekdays:['星期天','星期一','星期二','星期三','星期四','星期五','星期六'],
+		            exportButtonTitle:'导出PDF',
+		            printButtonTitle:'打印报表'
+		        },
+		        title:{
+		            text:'坑外土体测斜'
+		        },
+		        subtitle: {
+		            text: "即时形变 (mm)",
+		        },
+		        rangeSelector:{
+		            buttons:[{
+		                type:'minute',
+		                count:60,
+		                text:'时'
+		            },{
+		                type:'day',
+		                count:1,
+		                text:'天'
+		            },{
+		                type:'all',
+		                text:'所有'
+		            }],
+		            selected:2,
+		            inputEnabled:true
+		        },
+		        tooltip:{
+		            xDateFormat:'%Y-%m-%d %H:%M:%S'
+		        },
+		        xAxis:{
+		            dateTimeLabelFormats:{
+		                second:'%Y-%m-%d<br/>%H:%M:%S',
+		                minute:'%Y-%m-%d<br/>%H:%M',
+		                hour:'%Y-%m-%d<br/>%H',
+		                day:'%Y<br/>%m-%d',
+		                week:'%Y<br/>%m-%d',
+		                month:'%Y-%m',
+		                year:'%Y'
+		            }
+		        },
+		        yAxis: {
+		        	max: maxValue,
+		        	min: minValue,
+		            title: {
+		                // text: ' 沉降量  (mm)'
+		            }
+		        },
+		        series:[
+					{
+						name:'即时形变 (mm)',
+						data:[[1493568104000,-0.117],[1493575305000,-0.025],[1493582506000,-0.078],[1493589707000,0.002],[1493596908000,0.028],[1493604109000,0.031],[1493611310000,0.057],[1493618511000,0.035],[1493625712000,0.007],[1493632913000,-0.005],[1493640114000,-0.035],[1493647315000,-0.028],[1493654516000,-0.114],[1493661717000,-0.049],[1493668918000,-0.079],[1493676119000,-0.01],[1493683320000,0.023],[1493690521000,0.038],[1493697722000,0.033],[1493704923000,0.039],[1493712124000,0.045],[1493719325000,-0.009],[1493726526000,-0.012],[1493733727000,-0.027],[1493740928000,-0.024],[1493748129000,-0.022],[1493755330000,-0.031],[1493762531000,-0.021],[1493769732000,0.024],[1493776933000,0.027],[1493784134000,0.039],[1493791335000,0.05],[1493798536000,0.062]],
+						tooltip:
+						{
+							valueDecimals:3
+						}
+					}
+		        ]
+	
+		    });
+		});
+	
+
+
+function generateSinkingDataLine(){
+	var sensorTypeName = document.getElementById("sensorTypeName").value;
+	if(sensorTypeName == ""){
+		alert("请选择传感器类型，监测线和传感器!");
+		return;
+	}
+	var monitorlineid = document.getElementById("monitorlineid").value;
+	if(monitorlineid == ""){
+		alert("请选择监测线和传感器!");
+		return;
+	}
+	var sensorid = document.getElementById("sensorid").value;
+	if(sensorid == ""){
+		alert("请选择传感器!");
+		return;
+	}
+	var beginTime = document.getElementById("beginTime").value;
+	var endTime = document.getElementById("endTime").value;
+	if(beginTime == "" || endTime == ""){
+		alert("请选择时间!");
+		return;
+	}
+
+	//var beginTimeArray = /^(\d{4})-(\d{1,2})-(\d{1,2}) (\d{1,2}):(\d{1,2}):(\d{1,2})$/.exec(s);
+	var beginTimeArray = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(beginTime);
+	var endTimeArray = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(endTime);
+	var beginTimeDate = new Date(parseInt(beginTimeArray[1], 10),
+		parseInt(beginTimeArray[2], 10)-1,
+	    parseInt(beginTimeArray[3], 10));
+	var endTimeDate = new Date(parseInt(endTimeArray[1], 10),
+			parseInt(endTimeArray[2], 10)-1,
+		    parseInt(endTimeArray[3], 10));
+	//alert(beginTimeDate + "=="+ endTimeDate);
+	if(beginTimeDate > endTimeDate){
+		alert("结束时间必须大于开始时间!");
+		return;
+	}
+	var dtNew=new Date(beginTimeDate.getTime()+31*24*60*60*1000);
+	if(endTimeDate > dtNew){
+		alert("时间段必须在一个月内!");
+		return;
+	}
+	var maxchange = document.getElementById("currentMaxValue").value;
+	setCookie('currMax',maxchange);
+	var maxchange = document.getElementById("currentMinValue").value;
+    setCookie('currMin',maxchange)
+
+	document.ListForm.submit();
+}
+
+
+</script>
+<script>
+//写cookies
+function setCookie(c_name, value, expiredays){
+ 　　　　var exdate=new Date();
+　　　　exdate.setDate(exdate.getDate() + expiredays);
+　　　　document.cookie=c_name+ "=" + escape(value) + ((expiredays==null) ? "" : ";expires="+exdate.toGMTString());
+ 　　}
+ 
+//读取cookies
+function getCookie(name)
+{
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+ 
+    if(arr=document.cookie.match(reg))
+ 
+        return (arr[2]);
+    else
+        return null;
+}
+ 
+//删除cookies
+function delCookie(name)
+{
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+        document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+}
+
+</script>
+</head>
+<body class="info">
+<script type="text/javascript" language="javascript">
+$(document).ready(function () {  
+    setInterval("getCountData()", 10000);  
+});  
+function getCountData() {
+    jQuery.post("http://114.55.0.46:8888/dmo/common/getsensorcount.htm", function(data){
+        //$("#sensorCount").text("共有 " + data.sensorCount + " 个探测器 | ");
+        $("#sensorCountL1Alarm").text(" " + data.sensorCountL1Alarm + " ");
+        $("#sensorCountL2Alarm").text(" " + data.sensorCountL2Alarm + " ");
+        $("#sensorCountL3Alarm").text(" " + data.sensorCountL3Alarm + " ");
+    }, "json");
+}
+</script>
+<style>
+</style>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="user_table">
+
+    <tr>
+        <script>
+jQuery(document).ready(function(){
+	//
+	jQuery(".sellul>li>a").click(function(){
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menucontract.jpg");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menuspread.jpg");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	//
+	jQuery(".sellul>ul>li").removeClass("this");
+	jQuery("li[op=currentsinkingdataline]").addClass("this");
+
+	
+});
+
+function logout(){
+	var url = "http://114.55.0.46:8888/dmo/logout.htm";
+	var checkResult = confirm("确定退出登录？");
+    if (checkResult)
+    {
+    	window.location.href=url;
+    }
+}
+</script>
+
+<td width="1" id="userbg" valign="top">
+
+
+  </td>
+
+        <td id="centerbg" valign="top">
+        	<div class="productmain">
+             <div class="ordercon">
+              <form method="post" name="ListForm" id="ListForm">
+                <div class="ordersear">
+                    <span>测点编号:</span> 
+					<span class="ordersel">
+                  		<select name="sensorTypeName" id="sensorTypeName">
+                  			<option value="" selected="selected">请选择</option>
+		                  	<option value="P-levelingTransducer"   selected="selected" >CX5</option>
+		                  	<option value="1">CX6</option>
+		                  	<option value="2">CX7</option>
+		                  	<option value="3">CX8</option>
+		                  	<option value="4">CX9</option>
+		                  	<option value="5">CX10</option>
+		                  	<option value="6">CX11</option>
+		                  	<option value="7">CX12</option>
+		                  	<option value="8">CX13</option>
+		                  	<option value="9">CX14</option>
+		                  	<option value="10">CX15</option>
+		                  	<option value="11">CX16</option>
+		                  	<option value="12">CX17</option>
+		                  	<option value="13">CX18</option>
+		                </select>
+                	</span>
+                    <span>&nbsp;&nbsp;&nbsp;仪器:</span>
+					<span class="ordersel">
+                  		<select name="monitorlineid" id="monitorlineid">
+                  			<option value="" selected="selected">请选择</option>
+		                  			                  	<option value="1"   selected="selected" >CX5-01</option>
+		                  			                  	<option value="2"  >CX5-02</option>
+		                  			                  	<option value="3"  >CX5-03</option>
+		                  			                  	<option value="4"  >CX5-04</option>
+		                  	                  		</select>
+					</span>
+                	
+                  	<span class="px10">&nbsp;&nbsp;&nbsp;时间段:</span> 
+                  	<span class="ordersel">
+                  		<input name="beginTime" type="text" id="beginTime" value="2017-05-01" readonly="readonly" style="width:80px;"/>
+                  	</span>
+                  	<span>-</span>
+                  	<span class="ordersel">
+                  		<input name="endTime" type="text" id="endTime" value="2017-05-11" readonly="readonly" style="width:80px;"/>
+                  	</span>
+                  	<span class="orderbtn">
+                  		<input name="" type="button" value="生成曲线" style="cursor:pointer;" onclick="generateSinkingDataLine()"/>
+                  	</span>
+                </div>
+                </form>
+              </div>
+              <div class="operation">
+                   <div style="margin-bottom:15px">
+                        <span class="px10">&nbsp;&nbsp;&nbsp;形变范围(Y轴):</span> 
+                        <input id="currentMaxValue" maxlength="6" autocomplete="on"  placeholder="形变上限" 
+                             style="" size="10" onblur="generateSinkingDataLine()" onkeyup="this.value=this.value.replace(/[^\- \d.]/g,'')"/>&nbsp;-
+                        <input id="currentMinValue" maxlength="6" autocomplete="on"  placeholder="形变下限"
+                             style="" size="10" onblur="generateSinkingDataLine()" onkeyup="this.value=this.value.replace(/[^\- \d.]/g,'')"/>
+                   </div>
+                   
+                <table width="1039" border="0" cellspacing="0" cellpadding="0" id="opertable" >
+                    <tr id="opertitle">
+                    	<td>
+                    	</td>
+                    </tr>
+                </table>
+        		<div id="container" style="height: 550px; min-width: 310px"></div>
+        	</div>
+        	</div><!-- div-productmain END -->
+        </td>
+      </tr>
+    </table>
+
+<script type="text/javascript">
+    jQuery(".notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",delayTime:0 });
+</script>
+</body>
+</html>

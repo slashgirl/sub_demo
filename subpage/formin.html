@@ -1,0 +1,185 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>报表导入-MonitorSys</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/public_hj.css"
+	rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/index_hj.css"
+	rel="stylesheet" type="text/css" />
+<link
+	href="http://114.55.0.46:8888/dmo/resources/style/common/css/jquery-ui-1.8.22.custom.css"
+	type="text/css" rel="stylesheet" />
+<link href="http://114.55.0.46:8888/dmo/resources/css/user.css" type="text/css"
+	rel="stylesheet" />
+<!--
+<script type="text/javascript"
+	src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://114.55.0.46:8888/dmo/resources/js/public_hj.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.6.2.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-ui-1.8.21.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery.shop.common.js"></script>
+	-->
+
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/public_hj.css"
+	rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/style/common/css/index_hj.css"
+	rel="stylesheet" type="text/css" />
+<link href="http://114.55.0.46:8888/dmo/resources/css/user.css" type="text/css"
+	rel="stylesheet" />
+<link href="http://114.55.0.46:8888/dmo/resources/css/jquery.datetimepicker.css"
+	type="text/css" rel="stylesheet" />
+<script type="text/javascript"
+	src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="http://114.55.0.46:8888/dmo/resources/js/public_hj.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery.shop.common.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-1.10.2.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery.datetimepicker.full.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/jquery-ui-1.8.21.js"></script>
+
+<script src="http://114.55.0.46:8888/dmo/resources/js/highstock.js"></script>
+<script src="http://114.55.0.46:8888/dmo/resources/js/exporting.js"></script>
+<script type="text/javascript">
+function reload() {
+    location.reload();  
+}
+</script>
+<style>
+* {
+	font-family: '华文细黑';
+}
+
+#topbar {
+	width: 100%;
+	height: 100px;
+	background-color: gray;
+}
+
+#contable {
+	border: none;
+	border-bottom: 2px solid #E4E4E4;
+	width: 100%
+}
+
+#contable td {
+	border: 0px;
+	border-top: 1px solid #E4E4E4;
+	padding-left: 10px;
+	padding-top: 10px;
+	padding-bottom: 7px;
+}
+
+#contitle td {
+	border-bottom: 1px solid #AEC7E5;
+	border-top: 1px solid #AEC7E5;
+}
+</style>
+
+</head>
+<body class="info">
+	<script type="text/javascript" language="javascript">
+$(document).ready(function () {  
+    setInterval("getCountData()", 10000);  
+});  
+function getCountData() {
+    jQuery.post("http://114.55.0.46:8888/dmo/common/getsensorcount.htm", function(data){
+        //$("#sensorCount").text("共有 " + data.sensorCount + " 个探测器 | ");
+        $("#sensorCountL1Alarm").text(" " + data.sensorCountL1Alarm + " ");
+        $("#sensorCountL2Alarm").text(" " + data.sensorCountL2Alarm + " ");
+        $("#sensorCountL3Alarm").text(" " + data.sensorCountL3Alarm + " ");
+    }, "json");
+}
+</script>
+<style>
+</style>
+
+
+		
+
+		<table width="100%" border="0" cellspacing="0" cellpadding="0"
+			class="user_table">
+
+			<tr>
+				<script>
+jQuery(document).ready(function(){
+	//
+	jQuery(".sellul>li>a").click(function(){
+	  var child_show=jQuery(this).attr("child_show");
+	  if(child_show=="true"){
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menucontract.jpg");
+	    jQuery(this).parent().find("ul").slideUp('normal');
+	    jQuery(this).attr("child_show","false");
+	  }else{
+	    jQuery(this).parent().find("img").attr("src","http://114.55.0.46:8888/dmo/resources/images/menuspread.jpg");
+	    jQuery(this).parent().find("ul").slideDown('normal');
+	    jQuery(this).attr("child_show","true");
+	  }
+	});
+	//
+	jQuery(".sellul>ul>li").removeClass("this");
+	jQuery("li[op=import]").addClass("this");
+
+	
+});
+
+function logout(){
+	var url = "http://114.55.0.46:8888/dmo/logout.htm";
+	var checkResult = confirm("确定退出登录？");
+    if (checkResult)
+    {
+    	window.location.href=url;
+    }
+}
+</script>
+
+<td width="1" id="userbg" valign="top">
+
+</td>
+
+				<td id="centerbg" valign="top">
+					<div class="productmain">
+						<div class="ordercon">
+							<div style="width: 100%;">
+								<div id="topbar" style="color: white">
+									<div style="padding: 20px; float: left">
+										<form action="http://114.55.0.46:8888/dmo/picreport/importData.htm"
+											method="post" enctype="multipart/form-data"
+											id="dataimport_form">
+											<input type="file" name="file" id="file" />
+											<button type="submit">
+												<b>导入数据文件</b>
+											</button>
+										</form>
+										<br/>
+										<b style="padding-top: 5px">&nbsp;&nbsp;注意：请先确认报表的数据格式以保证操作成功;<br /></b>
+									</div>
+                                    
+									<div style="padding: 20px; float: right">
+										<button onclick="reload()">刷新</button>
+									</div>
+									<div style="padding: 20px; float: right">
+									    <b style="padding-top: 1px; color: #FF8800;">&nbsp;&nbsp;</b>
+									</div>
+								</div>
+								<div id="content" style="padding-bottom: 30px">
+									<table id="contable" border="0" cellspacing="0" cellpadding="0">
+									
+									</table>
+								</div>
+							</div>
+						</div>
+					
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<script type="text/javascript">
+    jQuery(".notice").slide({ titCell:".tab-hd li", mainCell:".tab-bd",delayTime:0 });
+</script>
+</body>
+</html>

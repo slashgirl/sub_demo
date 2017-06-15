@@ -1,0 +1,77 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/login.css" />
+    <link rel="Shortcut Icon" href="img/logo.png">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>GALAXY地铁监测平台</title>
+    <script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+    <script type="text/javascript">
+        if (window != top)
+            top.location.href = location.href;
+        function button_event(e) {
+            switch (e) {
+                case "up":
+                    $(".login_button").css({ "background": "url(img/dh_login_zc.png)" });
+                    break;
+                case "down":
+                    $(".login_button").css({ "background": "url(img/dh_login_anxia.png)" });
+                    break;
+                case "move":
+                    $(".login_button").css({ "background": "url(img/dh_login_huaguo.png)" });
+                    break;
+                case "out":
+                    $(".login_button").css({ "background": "url(img/dh_login_zc.png)" });
+            }
+        }
+
+        document.onkeydown = function (e) {
+            if (!e) e = window.event;
+            if ((e.keyCode || e.which) == 13) {
+                formSub();
+            }
+        }
+
+//      function formSub() {
+//          $("#loginForm").submit();
+//      }
+    </script>
+    <style>
+        .logintable{
+            font-family:微软雅黑
+        }
+    </style>
+</head>
+<body class="bg" style="overflow: hidden;">
+    <div class="logo"></div>
+    <form id="loginForm" action="/Login/Index" method="post">
+        <input id="projectId" name="projectId" value="5306839d-419b-4a8a-aa12-62c3cedff496" type="hidden"/>
+        <div class="loginimg">
+            <table class="logintable">
+                <tr>
+                    <td>用户名:</td>
+                    <td><input class="textstyle" style="height:21px" id="userName" name="userName" type="text"/></td>
+                </tr>
+                <tr>
+                    <td>密码:</td>
+                    <td><input class="textstyle" style="height:21px" id="password" name="password" type="password"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                    	<a href="index.htm">
+                    		<div class="login_button" onmousemove="button_event('move')" onmousedown="button_event('down')" onmouseup="button_event('up')" onmouseout="button_event('out')"></div>
+                    	</a>
+                    </td>
+                    <!--<td><div class="login_button" onclick="formSub();" onmousemove="button_event('move')" onmousedown="button_event('down')" onmouseup="button_event('up')" onmouseout="button_event('out')"></div></td>-->
+                </tr>
+            </table>
+        </div>
+    </form>
+    <div class="top_line"></div>
+    <div class="bottom_line"></div>
+    <div class="bottom_bg">版权所有&copy;上海匠数建筑科技有限公司</div>
+</body>
+</html>	
